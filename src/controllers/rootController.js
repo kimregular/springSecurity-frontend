@@ -47,5 +47,7 @@ export const postLogin = async (req, res) => {
             body: JSON.stringify(body),
         },
     );
+    const result = await response.json();
+    console.log(result);
     return res.redirect("/");
 };
