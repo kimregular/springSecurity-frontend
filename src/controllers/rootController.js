@@ -42,12 +42,11 @@ export const postLogin = async (req, res) => {
         {
             method: "POST",
             headers: {
-                "Content-Type": "application/json",
+                "Content-Type": "application/x-www-form-urlencoded",
             },
             body: JSON.stringify(body),
         },
     );
-    const result = await response.json();
-    console.log(result);
+    console.log(response);
     return res.redirect("/");
 };
