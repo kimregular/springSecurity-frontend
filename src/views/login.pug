@@ -2,7 +2,7 @@ extends index
 
 block content
     h2 LOGIN!
-    form.row.g-3(method="POST", name="loginForm")
+    form.row.g-3(method="POST", name="loginForm", action="/login")
         label.form-label(for="username") ID
         input.form-control(id="username", type="text", name="username", placeholder="id")
         label.form-label(for="password") Password
