@@ -1,7 +1,9 @@
+import dotenv from "dotenv";
 import express from "express";
 import morgan from "morgan";
-
 import rootRouter from "./routes/rootRouter.js";
+
+dotenv.config();
 
 const app = express();
 const logger = morgan("dev");
