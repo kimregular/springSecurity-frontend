@@ -3,9 +3,14 @@ header
         span SP HOME
     nav
         ul
-            li
-                a(href="/login")
-                    span login
-            li
-                a(href="/join")
-                    span join
+            if loggedIn
+                li
+                    a(href="/admin")
+                        span admin
+            else
+                li
+                    a(href="/login")
+                        span login
+                li
+                    a(href="/join")
+                        span join

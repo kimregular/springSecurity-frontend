@@ -52,8 +52,32 @@ export const postLogin = async (req, res) => {
         const token = response.headers.get("authorization");
         if (token) {
             console.log(token);
-            res.set("Authorization", token);
+            res.cookie("jwtToken", token, {
+                httpOnly: true, // XSS 공격 방지
+                sameSite: "Strict", // CSRF 공격 방지
+                maxAge: 1000 * 60 * 60 * 10, // 10시간 동안 유지
+            });
         }
+        return res.redirect("/");
     }
-    return res.redirect("/");
+};
+
+export const getAdmin = async (req, res) => {
+    const { jwtToken } = req.cookies;
+    const response = await fetch(
+        `${process.env.BACKEND_URL}${process.env.API_V1}/admin`,
+        {
+            method: "GET",
+            headers: {
+                Authorization: jwtToken,
+            },
+        },
+    );
+
+    let result = "";
+    if (response.status === 200) {
+        result = await response.text();
+    }
+    console.log("result = ", result);
+    return res.render("admin", { pageTitle: "ADMIN", result });
 };
