@@ -37,6 +37,7 @@ export const getLogin = async (req, res) => {
 
 export const postLogin = async (req, res) => {
     const { body } = req;
+    const loginForm = new URLSearchParams(body).toString();
     const response = await fetch(
         `${process.env.BACKEND_URL}${process.env.API_V1}/login`,
         {
@@ -44,9 +45,15 @@ export const postLogin = async (req, res) => {
             headers: {
                 "Content-Type": "application/x-www-form-urlencoded",
             },
-            body: JSON.stringify(body),
+            body: loginForm,
         },
     );
-    console.log(response);
+    if (response.status === 200) {
+        const token = response.headers.get("authorization");
+        if (token) {
+            console.log(token);
+            res.set("Authorization", token);
+        }
+    }
     return res.redirect("/");
 };
