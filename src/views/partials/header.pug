@@ -1,16 +1,16 @@
 header
-    a(href="/")
-        span SP HOME
-    nav
-        ul
-            if loggedIn
-                li
-                    a(href="/admin")
-                        span admin
-            else
-                li
-                    a(href="/login")
-                        span login
-                li
-                    a(href="/join")
-                        span join
+    nav.navbar.navbar-expand-lg.bg-body-tertiary
+        div.container-fluid
+            a.navbar-brand(href="/") SP HOME
+            button.navbar-toggler(type="button", data-bs-toggle="collapse", data-bs-target="#navbarSupportedContent", aria-controls="navbarSupportedContent", aria-expanded="false", aria-label="Toggle navigation")
+                span.navbar-toggler-icon
+            div#navbarSupportedContent.collapse.navbar-collapse
+                ul.navbar-nav.me-auto.mb-2.mb-lg-0
+                    if loggedIn
+                        li.nav-item
+                            a.nav-link(href="/admin") admin
+                    else
+                        li.nav-item
+                            a.nav-link(href="/login") login
+                        li.nav-item
+                            a.nav-link(href="/join") join
