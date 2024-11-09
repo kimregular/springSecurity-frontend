@@ -53,6 +53,11 @@ export const postLogin = async (req, res) => {
             });
         }
         return res.redirect("/");
+    } else {
+        return res.status(401).render("login", {
+            pageTitle: "Login",
+            errorMessage: "invalidUserInfo",
+        });
     }
 };
 
@@ -74,4 +79,9 @@ export const getAdmin = async (req, res) => {
     }
     console.log("result = ", result);
     return res.render("admin", { pageTitle: "ADMIN", result });
+};
+
+export const logout = (req, res) => {
+    res.clearCookie("jwtToken");
+    return res.redirect("/");
 };

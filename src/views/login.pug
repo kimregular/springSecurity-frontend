@@ -2,6 +2,8 @@ extends index
 
 block content
     h2.text-center LOGIN!
+    if errorMessage
+        span #{errorMessage}
     form(method="POST", name="loginForm", action="/login")
         div.mb-3
             label.form-label(for="username") ID
