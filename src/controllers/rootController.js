@@ -10,7 +10,6 @@ export const getJoin = (req, res) => {
 
 export const postJoin = async (req, res) => {
     const { body: joinRequest } = req;
-    console.log(joinRequest);
     try {
         await axios.post(
             `${process.env.BACKEND_URL}${process.env.API_V1}/join`,
@@ -53,28 +52,25 @@ export const postLogin = async (req, res) => {
                 headers: {
                     "Content-Type": "application/x-www-form-urlencoded",
                 },
+                withCredentials: true,
             },
         );
-        if (response.status === 200) {
-            const token = response.headers["authorization"];
-            if (token) {
-                console.log(token);
-                res.cookie("jwtToken", token, {
-                    httpOnly: true, // XSS 공격 방지
-                    sameSite: "Strict", // CSRF 공격 방지
-                    maxAge: 1000 * 60 * 60 * 10, // 10시간 동안 유지
-                });
-            }
-            return res.redirect("/");
-        } else {
-            return res.status(401).render("login", {
-                pageTitle: "Login",
-                errorMessage: "invalidUserInfo",
-            });
-        }
+        const cookies = response.headers["set-cookie"];
+        const token = cookies.find((cookie) =>
+            cookie.startsWith("Authorization="),
+        );
+        const jwtToken = token.split("Authorization=")[1].split(";")[0];
+        res.cookie("jwtToken", jwtToken, {
+            httpOnly: true, // XSS 공격 방지
+            sameSite: "Lax", // CSRF 공격 방지
+            maxAge: 1000 * 60 * 60 * 60, // 10시간 동안 유지
+        });
+        return res.redirect("/");
     } catch (error) {
-        console.error("Error during login request:", error);
-        return res.status(500).send("Server error");
+        return res.status(error.status).render("login", {
+            pageTitle: "Login",
+            errorMessage: "invalidUserInfo",
+        });
     }
 };
 
@@ -94,7 +90,6 @@ export const getAdmin = async (req, res) => {
         if (response.status === 200) {
             result = response.data;
         }
-        console.log("result =", result);
         return res.render("admin", { pageTitle: "ADMIN", result });
     } catch (error) {
         console.error("Error during admin fetch:", error);
